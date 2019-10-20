@@ -127,6 +127,66 @@ class LatestPostsEdit extends Component {
 
 		return (
 			<Fragment>
+				<InspectorControls>
+					<PanelBody title={ __( 'Post Content Settings' ) }>
+						<ToggleControl
+							label={ __( 'Post Content' ) }
+							checked={ displayPostContent }
+							onChange={ ( value ) => setAttributes( { displayPostContent: value } ) }
+						/>
+						{ displayPostContent &&
+						<RadioControl
+							label="Show:"
+							selected={ displayPostContentRadio }
+							options={ [
+								{ label: 'Excerpt', value: 'excerpt' },
+								{ label: 'Full Post', value: 'full_post' },
+							] }
+							onChange={ ( value ) => setAttributes( { displayPostContentRadio: value } ) }
+						/>
+						}
+						{ displayPostContent && displayPostContentRadio === 'excerpt' &&
+							<RangeControl
+								label={ __( 'Max number of words in excerpt' ) }
+								value={ excerptLength }
+								onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
+								min={ 10 }
+								max={ 100 }
+							/>
+						}
+					</PanelBody>
+
+					<PanelBody title={ __( 'Post Meta Settings' ) }>
+						<ToggleControl
+							label={ __( 'Display post date' ) }
+							checked={ displayPostDate }
+							onChange={ ( value ) => setAttributes( { displayPostDate: value } ) }
+						/>
+					</PanelBody>
+
+					<PanelBody title={ __( 'Sorting and Filtering' ) }>
+						<QueryControls
+							{ ...{ order, orderBy } }
+							numberOfItems={ postsToShow }
+							categoriesList={ categoriesList }
+							selectedCategoryId={ categories }
+							onOrderChange={ ( value ) => setAttributes( { order: value } ) }
+							onOrderByChange={ ( value ) => setAttributes( { orderBy: value } ) }
+							onCategoryChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
+							onNumberOfItemsChange={ ( value ) => setAttributes( { postsToShow: value } ) }
+						/>
+						{ postLayout === 'grid' &&
+							<RangeControl
+								label={ __( 'Columns' ) }
+								value={ columns }
+								onChange={ ( value ) => setAttributes( { columns: value } ) }
+								min={ 2 }
+								max={ ! hasPosts ? MAX_POSTS_COLUMNS : Math.min( MAX_POSTS_COLUMNS, latestPosts.length ) }
+								required
+							/>
+						}
+					</PanelBody>
+				</InspectorControls>
 				<BlockControls>
 					<Toolbar controls={ layoutControls } />
 				</BlockControls>
