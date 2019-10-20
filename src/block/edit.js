@@ -235,6 +235,8 @@ class LatestPostsEdit extends Component {
 
 		const dateFormat = __experimentalGetSettings().formats.date;
 
+		console.log(latestPosts);
+
 		return (
 			<Fragment>
 				{ inspectorControls }
