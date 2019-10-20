@@ -75,7 +75,8 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 	 * @since 1.16.0
 	 */
 	register_block_type(
-		'cgb/block-gutten-posts-block', array(
+		'cgb/block-gutten-posts-block',
+		array(
 			// Enqueue blocks.style.build.css on both frontend & backend.
 			'style'         => 'gutten_posts_block-cgb-style-css',
 			// Enqueue blocks.build.js in the editor only.
@@ -88,3 +89,40 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 
 // Hook: Block assets.
 add_action( 'init', 'gutten_posts_block_cgb_block_assets' );
+
+/**
+ * Get post thumbnail url.
+ * @param  [type] $object [description]
+ * @return [type]         [description]
+ */
+function gutten_posts_block_featured_image_urls( $object ) {
+	// Get the featured image.
+	$image = wp_get_attachment_image_src( $object['featured_media'], 'full', false );
+
+	// Return featured image urls.
+	return [
+		'thumbnail' => is_array( $image ) ? wp_get_attachment_image_src( $object['featured_media'], 'thumbnail', false ) : '',
+		'medium'    => is_array( $image ) ? wp_get_attachment_image_src( $object['featured_media'], 'medium', false ) : '',
+		'large'     => is_array( $image ) ? wp_get_attachment_image_src( $object['featured_media'], 'large', false ) : '',
+		'full'      => is_array( $image ) ? $image : '',
+	];
+}
+
+/**
+ * Register rest field.
+ * @return [type] [description]
+ */
+function gutten_posts_block_create_register_rest_field() {
+	// register_rest_field ( 'name-of-post-type', 'name-of-field-to-return', array-of-callbacks-and-schema() )
+	register_rest_field(
+		'post',
+		'featured_image_urls',
+		array(
+			'get_callback' => 'gutten_posts_block_featured_image_urls',
+			'schema'       => null,
+		)
+	);
+}
+
+// Hook: Rest API.
+add_action( 'rest_api_init', 'gutten_posts_block_create_register_rest_field' );
