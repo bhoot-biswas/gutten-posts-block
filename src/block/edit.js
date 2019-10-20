@@ -24,6 +24,7 @@ import {
 	ToggleControl,
 	Toolbar,
 	RadioControl,
+	SelectControl,
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import {
@@ -52,6 +53,12 @@ const CATEGORIES_LIST_QUERY = {
 	per_page: -1,
 };
 const MAX_POSTS_COLUMNS = 6;
+const featuredImageSizes = [
+	{ value: 'thumbnail', label: __( 'Thumbnail' ) },
+	{ value: 'medium', label: __( 'Medium' ) },
+	{ value: 'large', label: __( 'Large' ) },
+	{ value: 'full', label: __( 'Full' ) },
+]
 
 class LatestPostsEdit extends Component {
 	constructor() {
@@ -101,6 +108,8 @@ class LatestPostsEdit extends Component {
 			displayPostContentRadio,
 			displayPostContent,
 			displayPostDate,
+			displayFeaturedImage,
+			featuredImageSize,
 			postLayout,
 			columns,
 			order,
@@ -118,16 +127,29 @@ class LatestPostsEdit extends Component {
 						checked={ displayPostContent }
 						onChange={ ( value ) => setAttributes( { displayPostContent: value } ) }
 					/>
-					{ displayPostContent &&
-					<RadioControl
-						label="Show:"
-						selected={ displayPostContentRadio }
-						options={ [
-							{ label: 'Excerpt', value: 'excerpt' },
-							{ label: 'Full Post', value: 'full_post' },
-						] }
-						onChange={ ( value ) => setAttributes( { displayPostContentRadio: value } ) }
+					<ToggleControl
+						label={ __( 'Display Featured Image' ) }
+						checked={ displayFeaturedImage }
+						onChange={ displayFeaturedImage => setAttributes( { displayFeaturedImage } ) }
 					/>
+					{ displayFeaturedImage &&
+						<SelectControl
+							label={ __( 'Featured Image Size' ) }
+							options={ featuredImageSizes }
+							value={ featuredImageSize }
+							onChange={ featuredImageSize => setAttributes( { featuredImageSize } ) }
+						/>
+					}
+					{ displayPostContent &&
+						<RadioControl
+							label="Show:"
+							selected={ displayPostContentRadio }
+							options={ [
+								{ label: 'Excerpt', value: 'excerpt' },
+								{ label: 'Full Post', value: 'full_post' },
+							] }
+							onChange={ ( value ) => setAttributes( { displayPostContentRadio: value } ) }
+						/>
 					}
 					{ displayPostContent && displayPostContentRadio === 'excerpt' &&
 						<RangeControl
