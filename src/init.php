@@ -41,7 +41,7 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 		'gutten_posts_block-cgb-block-js', // Handle.
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ), // Block.build.js: We register the block here. Built with Webpack.
 		array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-editor' ), // Dependencies, defined above.
-		null, // filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: filemtime — Gets file modification time.
+		filemtime( plugin_dir_path( __DIR__ ) . 'dist/blocks.build.js' ), // Version: filemtime — Gets file modification time.
 		true // Enqueue the script in the footer.
 	);
 
@@ -77,6 +77,62 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 	register_block_type(
 		'cgb/block-gutten-posts-block',
 		array(
+			'attributes'    => array(
+				'align'                   => array(
+					'type' => 'string',
+					'enum' => array( 'left', 'center', 'right', 'wide', 'full' ),
+				),
+				'className'               => array(
+					'type' => 'string',
+				),
+				'categories'              => array(
+					'type' => 'string',
+				),
+				'postsToShow'             => array(
+					'type'    => 'number',
+					'default' => 5,
+				),
+				'displayPostContent'      => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'displayPostContentRadio' => array(
+					'type'    => 'string',
+					'default' => 'excerpt',
+				),
+				'displayFeaturedImage'    => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'featuredImageSize'       => array(
+					'type'    => 'string',
+					'default' => 'medium',
+				),
+				'excerptLength'           => array(
+					'type'    => 'number',
+					'default' => 55,
+				),
+				'displayPostDate'         => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'postLayout'              => array(
+					'type'    => 'string',
+					'default' => 'list',
+				),
+				'columns'                 => array(
+					'type'    => 'number',
+					'default' => 3,
+				),
+				'order'                   => array(
+					'type'    => 'string',
+					'default' => 'desc',
+				),
+				'orderBy'                 => array(
+					'type'    => 'string',
+					'default' => 'date',
+				),
+			),
 			// Enqueue blocks.style.build.css on both frontend & backend.
 			'style'         => 'gutten_posts_block-cgb-style-css',
 			// Enqueue blocks.build.js in the editor only.
