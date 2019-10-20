@@ -258,8 +258,19 @@ class LatestPostsEdit extends Component {
 						const excerptElement = document.createElement( 'div' );
 						excerptElement.innerHTML = excerpt;
 						excerpt = excerptElement.textContent || excerptElement.innerText || '';
+
+						const featuredImageSrc = ( post.featured_image_urls[ featuredImageSize ] || [] )[ 0 ];
+						const featuredImage = displayFeaturedImage && featuredImageSrc && (
+							<figure>
+								<a href={ post.link } target="_blank">
+									<img src={ featuredImageSrc } alt={ __( 'featured' ) } />
+								</a>
+							</figure>
+						);
+
 						return (
 							<li key={ i }>
+								{ featuredImage }
 								<a href={ post.link } target="_blank" rel="noreferrer noopener">
 									{ titleTrimmed ? (
 										<RawHTML>
