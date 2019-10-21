@@ -182,7 +182,6 @@ class LatestPostsEdit extends Component {
 							onChange={ ( value ) => setAttributes( { showAvatar: value } ) }
 						/>
 					) }
-
 				</PanelBody>
 
 				<PanelBody title={ __( 'Sorting and Filtering' ) }>
@@ -250,7 +249,67 @@ class LatestPostsEdit extends Component {
 
 		const dateFormat = __experimentalGetSettings().formats.date;
 
-		console.log(latestPosts);
+		const renderPost = ( post, i ) => {
+			const titleTrimmed = post.title.rendered.trim();
+			let excerpt = post.excerpt.rendered;
+			if ( post.excerpt.raw === '' ) {
+				excerpt = post.content.raw;
+			}
+			const excerptElement = document.createElement( 'div' );
+			excerptElement.innerHTML = excerpt;
+			excerpt = excerptElement.textContent || excerptElement.innerText || '';
+
+			const featuredImageSrc = ( post.featured_image_src[ featuredImageSize ] || [] )[ 0 ];
+			const featuredImage = displayFeaturedImage && featuredImageSrc && (
+				<figure>
+					<a href={ post.link } target="_blank">
+						<img src={ featuredImageSrc } alt={ __( 'featured' ) } />
+					</a>
+				</figure>
+			);
+
+			return (
+				<li key={ i }>
+					{ featuredImage }
+					<a href={ post.link } target="_blank" rel="noreferrer noopener">
+						{ titleTrimmed ? (
+							<RawHTML>
+								{ titleTrimmed }
+							</RawHTML>
+						) :
+							__( '(no title)' )
+						}
+					</a>
+					{ displayPostDate && post.date_gmt &&
+						<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date">
+							{ dateI18n( dateFormat, post.date_gmt ) }
+						</time>
+					}
+					{ displayPostContent && displayPostContentRadio === 'excerpt' &&
+					<div className="wp-block-latest-posts__post-excerpt">
+						<RawHTML
+							key="html"
+						>
+							{ excerptLength < excerpt.trim().split( ' ' ).length ?
+								excerpt.trim().split( ' ', excerptLength ).join( ' ' ) + ' ... <a href=' + post.link + 'target="_blank" rel="noopener noreferrer">' + __( 'Read more' ) + '</a>' :
+								excerpt.trim().split( ' ', excerptLength ).join( ' ' ) }
+						</RawHTML>
+					</div>
+					}
+					{ displayPostContent && displayPostContentRadio === 'full_post' &&
+					<div className="wp-block-latest-posts__post-full-content">
+						<RawHTML
+							key="html"
+						>
+							{ post.content.raw.trim() }
+						</RawHTML>
+					</div>
+					}
+				</li>
+			);
+		}
+
+		console.log( latestPosts );
 
 		return (
 			<Fragment>
@@ -266,65 +325,7 @@ class LatestPostsEdit extends Component {
 						[ `columns-${ columns }` ]: postLayout === 'grid',
 					} ) }
 				>
-					{ displayPosts.map( ( post, i ) => {
-						const titleTrimmed = post.title.rendered.trim();
-						let excerpt = post.excerpt.rendered;
-						if ( post.excerpt.raw === '' ) {
-							excerpt = post.content.raw;
-						}
-						const excerptElement = document.createElement( 'div' );
-						excerptElement.innerHTML = excerpt;
-						excerpt = excerptElement.textContent || excerptElement.innerText || '';
-
-						const featuredImageSrc = ( post.featured_image_src[ featuredImageSize ] || [] )[ 0 ];
-						const featuredImage = displayFeaturedImage && featuredImageSrc && (
-							<figure>
-								<a href={ post.link } target="_blank">
-									<img src={ featuredImageSrc } alt={ __( 'featured' ) } />
-								</a>
-							</figure>
-						);
-
-						return (
-							<li key={ i }>
-								{ featuredImage }
-								<a href={ post.link } target="_blank" rel="noreferrer noopener">
-									{ titleTrimmed ? (
-										<RawHTML>
-											{ titleTrimmed }
-										</RawHTML>
-									) :
-										__( '(no title)' )
-									}
-								</a>
-								{ displayPostDate && post.date_gmt &&
-									<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date">
-										{ dateI18n( dateFormat, post.date_gmt ) }
-									</time>
-								}
-								{ displayPostContent && displayPostContentRadio === 'excerpt' &&
-								<div className="wp-block-latest-posts__post-excerpt">
-									<RawHTML
-										key="html"
-									>
-										{ excerptLength < excerpt.trim().split( ' ' ).length ?
-											excerpt.trim().split( ' ', excerptLength ).join( ' ' ) + ' ... <a href=' + post.link + 'target="_blank" rel="noopener noreferrer">' + __( 'Read more' ) + '</a>' :
-											excerpt.trim().split( ' ', excerptLength ).join( ' ' ) }
-									</RawHTML>
-								</div>
-								}
-								{ displayPostContent && displayPostContentRadio === 'full_post' &&
-								<div className="wp-block-latest-posts__post-full-content">
-									<RawHTML
-										key="html"
-									>
-										{ post.content.raw.trim() }
-									</RawHTML>
-								</div>
-								}
-							</li>
-						);
-					} ) }
+					{ displayPosts.map( ( post, i ) => renderPost( post, i ) ) }
 				</ul>
 			</Fragment>
 		);
