@@ -108,6 +108,8 @@ class LatestPostsEdit extends Component {
 			displayPostContentRadio,
 			displayPostContent,
 			displayPostDate,
+			showAuthor,
+			showAvatar,
 			displayFeaturedImage,
 			featuredImageSize,
 			postLayout,
@@ -168,6 +170,19 @@ class LatestPostsEdit extends Component {
 						checked={ displayPostDate }
 						onChange={ ( value ) => setAttributes( { displayPostDate: value } ) }
 					/>
+					<ToggleControl
+						label={ __( 'Show Author' ) }
+						checked={ showAuthor }
+						onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
+					/>
+					{ showAuthor && (
+						<ToggleControl
+							label={ __( 'Show Author Avatar' ) }
+							checked={ showAvatar }
+							onChange={ ( value ) => setAttributes( { showAvatar: value } ) }
+						/>
+					) }
+
 				</PanelBody>
 
 				<PanelBody title={ __( 'Sorting and Filtering' ) }>
