@@ -8,6 +8,8 @@
  * @package CGB
  */
 
+namespace BengalStudio;
+
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -77,7 +79,7 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 	register_block_type(
 		'cgb/block-gutten-posts-block',
 		array(
-			'attributes'    => array(
+			'attributes'      => array(
 				'align'                   => array(
 					'type' => 'string',
 					'enum' => array( 'left', 'center', 'right', 'wide', 'full' ),
@@ -146,14 +148,16 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 				),
 			),
 			// Enqueue blocks.style.build.css on both frontend & backend.
-			'style'         => 'gutten_posts_block-cgb-style-css',
+			'style'           => 'gutten_posts_block-cgb-style-css',
 			// Enqueue blocks.build.js in the editor only.
-			'editor_script' => 'gutten_posts_block-cgb-block-js',
+			'editor_script'   => 'gutten_posts_block-cgb-block-js',
 			// Enqueue blocks.editor.build.css in the editor only.
-			'editor_style'  => 'gutten_posts_block-cgb-block-editor-css',
+			'editor_style'    => 'gutten_posts_block-cgb-block-editor-css',
+			// Render callback.
+			'render_callback' => __NAMESPACE__ . '\render_latest_posts',
 		)
 	);
 }
 
 // Hook: Block assets.
-add_action( 'init', 'gutten_posts_block_cgb_block_assets' );
+add_action( 'init', __NAMESPACE__ . '\gutten_posts_block_cgb_block_assets' );
