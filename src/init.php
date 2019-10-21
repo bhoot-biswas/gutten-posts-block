@@ -100,6 +100,14 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 					'type'    => 'string',
 					'default' => 'excerpt',
 				),
+				'showAuthor'              => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
+				'showAvatar'              => array(
+					'type'    => 'boolean',
+					'default' => false,
+				),
 				'displayFeaturedImage'    => array(
 					'type'    => 'boolean',
 					'default' => false,
