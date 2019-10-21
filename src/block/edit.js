@@ -280,11 +280,29 @@ class LatestPostsEdit extends Component {
 							__( '(no title)' )
 						}
 					</a>
-					{ displayPostDate && post.date_gmt &&
-						<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date">
-							{ dateI18n( dateFormat, post.date_gmt ) }
-						</time>
-					}
+					<div className="entry-meta">
+						{ showAuthor && post.author_info.avatar && showAvatar && (
+							<span className="avatar author-avatar" key="author-avatar">
+								<RawHTML>{ post.author_info.avatar }</RawHTML>
+							</span>
+						) }
+
+						{ showAuthor && (
+							<span className="byline">
+								{ __( 'by' ) }{' '}
+								<span className="author vcard">
+									<a className="url fn n" href="#">
+										{ post.author_info.display_name }
+									</a>
+								</span>
+							</span>
+						) }
+						{ displayPostDate && post.date_gmt && (
+							<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date entry-date published" key="pub-date">
+								{ dateI18n( dateFormat, post.date_gmt ) }
+							</time>
+						) }
+					</div>
 					{ displayPostContent && displayPostContentRadio === 'excerpt' &&
 					<div className="wp-block-latest-posts__post-excerpt">
 						<RawHTML
@@ -308,8 +326,6 @@ class LatestPostsEdit extends Component {
 				</li>
 			);
 		}
-
-		console.log( latestPosts );
 
 		return (
 			<Fragment>
