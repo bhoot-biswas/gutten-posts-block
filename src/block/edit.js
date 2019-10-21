@@ -258,71 +258,71 @@ class LatestPostsEdit extends Component {
 			const excerptElement = document.createElement( 'div' );
 			excerptElement.innerHTML = excerpt;
 			excerpt = excerptElement.textContent || excerptElement.innerText || '';
-
 			const featuredImageSrc = ( post.featured_image_src[ featuredImageSize ] || [] )[ 0 ];
-			const featuredImage = displayFeaturedImage && featuredImageSrc && (
-				<figure>
-					<a href={ post.link } target="_blank">
-						<img src={ featuredImageSrc } alt={ __( 'featured' ) } />
-					</a>
-				</figure>
-			);
 
 			return (
-				<li key={ i }>
-					{ featuredImage }
-					<a href={ post.link } target="_blank" rel="noreferrer noopener">
-						{ titleTrimmed ? (
-							<RawHTML>
-								{ titleTrimmed }
-							</RawHTML>
-						) :
-							__( '(no title)' )
-						}
-					</a>
-					<div className="entry-meta">
-						{ showAuthor && post.author_info.avatar && showAvatar && (
-							<span className="avatar author-avatar" key="author-avatar">
-								<RawHTML>{ post.author_info.avatar }</RawHTML>
-							</span>
-						) }
-
-						{ showAuthor && (
-							<span className="byline">
-								{ __( 'by' ) }{' '}
-								<span className="author vcard">
-									<a className="url fn n" href="#">
-										{ post.author_info.display_name }
-									</a>
+				<li key={ i } className={ featuredImageSrc && 'has-post-thumbnail' }>
+					{ displayFeaturedImage && featuredImageSrc && (
+						<figure className="post-thumbnail">
+							<a href={ post.link } target="_blank">
+								<img src={ featuredImageSrc } alt={ __( 'featured' ) } />
+							</a>
+						</figure>
+					) }
+					<div className="entry-body">
+						<a href={ post.link } target="_blank" rel="noreferrer noopener">
+							{ titleTrimmed ? (
+								<RawHTML>
+									{ titleTrimmed }
+								</RawHTML>
+							) :
+								__( '(no title)' )
+							}
+						</a>
+						<div className="entry-meta">
+							{ showAuthor && post.author_info.avatar && showAvatar && (
+								<span className="avatar author-avatar" key="author-avatar">
+									<RawHTML>{ post.author_info.avatar }</RawHTML>
 								</span>
-							</span>
-						) }
-						{ displayPostDate && post.date_gmt && (
-							<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date entry-date published" key="pub-date">
-								{ dateI18n( dateFormat, post.date_gmt ) }
-							</time>
-						) }
+							) }
+
+							{ showAuthor && (
+								<span className="byline">
+									{ __( 'by' ) }{' '}
+									<span className="author vcard">
+										<a className="url fn n" href="#">
+											{ post.author_info.display_name }
+										</a>
+									</span>
+								</span>
+							) }
+							{ displayPostDate && post.date_gmt && (
+								<time dateTime={ format( 'c', post.date_gmt ) } className="wp-block-latest-posts__post-date entry-date published" key="pub-date">
+									{ dateI18n( dateFormat, post.date_gmt ) }
+								</time>
+							) }
+						</div>
+						{ displayPostContent && displayPostContentRadio === 'excerpt' &&
+							<div className="wp-block-latest-posts__post-excerpt">
+								<RawHTML
+									key="html"
+								>
+									{ excerptLength < excerpt.trim().split( ' ' ).length ?
+										excerpt.trim().split( ' ', excerptLength ).join( ' ' ) + ' ... <a href=' + post.link + 'target="_blank" rel="noopener noreferrer">' + __( 'Read more' ) + '</a>' :
+										excerpt.trim().split( ' ', excerptLength ).join( ' ' ) }
+								</RawHTML>
+							</div>
+						}
+						{ displayPostContent && displayPostContentRadio === 'full_post' &&
+							<div className="wp-block-latest-posts__post-full-content">
+								<RawHTML
+									key="html"
+								>
+									{ post.content.raw.trim() }
+								</RawHTML>
+							</div>
+						}
 					</div>
-					{ displayPostContent && displayPostContentRadio === 'excerpt' &&
-					<div className="wp-block-latest-posts__post-excerpt">
-						<RawHTML
-							key="html"
-						>
-							{ excerptLength < excerpt.trim().split( ' ' ).length ?
-								excerpt.trim().split( ' ', excerptLength ).join( ' ' ) + ' ... <a href=' + post.link + 'target="_blank" rel="noopener noreferrer">' + __( 'Read more' ) + '</a>' :
-								excerpt.trim().split( ' ', excerptLength ).join( ' ' ) }
-						</RawHTML>
-					</div>
-					}
-					{ displayPostContent && displayPostContentRadio === 'full_post' &&
-					<div className="wp-block-latest-posts__post-full-content">
-						<RawHTML
-							key="html"
-						>
-							{ post.content.raw.trim() }
-						</RawHTML>
-					</div>
-					}
 				</li>
 			);
 		}

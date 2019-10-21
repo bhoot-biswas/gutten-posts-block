@@ -116,6 +116,10 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 					'type'    => 'string',
 					'default' => 'medium',
 				),
+				'featuredImagePosition'   => array(
+					'type'    => 'string',
+					'default' => 'top',
+				),
 				'excerptLength'           => array(
 					'type'    => 'number',
 					'default' => 55,
