@@ -25,6 +25,8 @@ import {
 	Toolbar,
 	RadioControl,
 	SelectControl,
+	Path,
+	SVG,
 } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import {
@@ -59,6 +61,13 @@ const featuredImageSizes = [
 	{ value: 'large', label: __( 'Large' ) },
 	{ value: 'full', label: __( 'Full' ) },
 ]
+
+const coverIcon = (
+	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+		<Path d="M0 0h24v24H0z" fill="none" />
+		<Path d="M4 4h7V2H4c-1.1 0-2 .9-2 2v7h2V4zm6 9l-4 5h12l-3-4-2.03 2.71L10 13zm7-4.5c0-.83-.67-1.5-1.5-1.5S14 7.67 14 8.5s.67 1.5 1.5 1.5S17 9.33 17 8.5zM20 2h-7v2h7v7h2V4c0-1.1-.9-2-2-2zm0 18h-7v2h7c1.1 0 2-.9 2-2v-7h-2v7zM4 13H2v7c0 1.1.9 2 2 2h7v-2H4v-7z" />
+	</SVG>
+);
 
 class LatestPostsEdit extends Component {
 	constructor() {
@@ -112,6 +121,7 @@ class LatestPostsEdit extends Component {
 			showAvatar,
 			displayFeaturedImage,
 			featuredImageSize,
+			featuredImagePosition,
 			postLayout,
 			columns,
 			order,
@@ -247,6 +257,33 @@ class LatestPostsEdit extends Component {
 			},
 		];
 
+		const featuredImagePositionControls = [
+			{
+				icon: 'align-none',
+				title: __( 'Show media on top', 'newspack-blocks' ),
+				isActive: featuredImagePosition === 'top',
+				onClick: () => setAttributes( { featuredImagePosition: 'top' } ),
+			},
+			{
+				icon: 'align-pull-left',
+				title: __( 'Show media on left', 'newspack-blocks' ),
+				isActive: featuredImagePosition === 'left',
+				onClick: () => setAttributes( { featuredImagePosition: 'left' } ),
+			},
+			{
+				icon: 'align-pull-right',
+				title: __( 'Show media on right', 'newspack-blocks' ),
+				isActive: featuredImagePosition === 'right',
+				onClick: () => setAttributes( { featuredImagePosition: 'right' } ),
+			},
+			{
+				icon: coverIcon,
+				title: __( 'Show media behind', 'newspack-blocks' ),
+				isActive: featuredImagePosition === 'behind',
+				onClick: () => setAttributes( { featuredImagePosition: 'behind' } ),
+			},
+		];
+
 		const dateFormat = __experimentalGetSettings().formats.date;
 
 		const renderPost = ( post, i ) => {
@@ -332,12 +369,14 @@ class LatestPostsEdit extends Component {
 				{ inspectorControls }
 				<BlockControls>
 					<Toolbar controls={ layoutControls } />
+					{ displayFeaturedImage && <Toolbar controls={ featuredImagePositionControls } /> }
 				</BlockControls>
 				<ul
 					className={ classnames( this.props.className, {
 						'wp-block-latest-posts__list': true,
 						'is-grid': postLayout === 'grid',
 						'has-dates': displayPostDate,
+						[ `image-align${ featuredImagePosition }` ]: displayFeaturedImage,
 						[ `columns-${ columns }` ]: postLayout === 'grid',
 					} ) }
 				>
