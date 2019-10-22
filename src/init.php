@@ -77,7 +77,7 @@ function gutten_posts_block_cgb_block_assets() { // phpcs:ignore
 	 * @since 1.16.0
 	 */
 	register_block_type(
-		'cgb/block-gutten-posts-block',
+		'bengal-studio/posts-block',
 		array(
 			'attributes'      => array(
 				'align'                   => array(
