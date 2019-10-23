@@ -36,7 +36,7 @@ class Posts_Block_API {
 	 */
 	public static function get_featured_image_src( $object ) {
 		if ( 0 === $object['featured_media'] ) {
-			return;
+			return [];
 		}
 
 		// Get the featured image.

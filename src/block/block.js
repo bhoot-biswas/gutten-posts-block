@@ -40,7 +40,10 @@ registerBlockType( 'bengal-studio/posts-block', {
 		__( 'CGB Example' ),
 		__( 'create-guten-block' ),
 	],
-
+    supports: {
+		align: true,
+		html: false,
+	},
 	edit,
     save: () => null, // to use view.php
 } );

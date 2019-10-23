@@ -298,7 +298,7 @@ class LatestPostsEdit extends Component {
 			const featuredImageSrc = ( post.featured_image_src[ featuredImageSize ] || [] )[ 0 ];
 
 			return (
-				<li key={ i } className={ featuredImageSrc && 'has-post-thumbnail' }>
+				<li key={ i } className={ featuredImageSrc && 'post-has-image' }>
 					{ displayFeaturedImage && featuredImageSrc && (
 						<figure className="post-thumbnail">
 							<a href={ post.link } target="_blank">
@@ -307,15 +307,17 @@ class LatestPostsEdit extends Component {
 						</figure>
 					) }
 					<div className="entry-body">
-						<a href={ post.link } target="_blank" rel="noreferrer noopener">
-							{ titleTrimmed ? (
-								<RawHTML>
-									{ titleTrimmed }
-								</RawHTML>
-							) :
-								__( '(no title)' )
-							}
-						</a>
+						<h2 className="entry-title">
+							<a href={ post.link } target="_blank" rel="noreferrer noopener">
+								{ titleTrimmed ? (
+									<RawHTML>
+										{ titleTrimmed }
+									</RawHTML>
+								) :
+									__( '(no title)' )
+								}
+							</a>
+						</h2>
 						<div className="entry-meta">
 							{ showAuthor && post.author_info.avatar && showAvatar && (
 								<span className="avatar author-avatar" key="author-avatar">

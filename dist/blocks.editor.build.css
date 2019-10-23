@@ -10,10 +10,5 @@
  * CSS for just Backend enqueued after style.scss
  * which makes it higher in priority.
  */
-.wp-block-cgb-block-gutten-posts-block {
-  background: #28a745;
-  border: 0.2rem solid #000;
-  color: #000;
-  margin: 0 auto;
-  max-width: 740px;
-  padding: 2rem; }
+.editor-styles-wrapper .wp-block-bengal-studio-posts-block {
+  list-style-type: none; }

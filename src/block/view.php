@@ -24,7 +24,7 @@ function render_latest_posts( $attributes ) {
 	$list_items_markup = '';
 	$excerpt_length    = $attributes['excerptLength'];
 	ob_start();
-	$class = 'bengal-studio-block-latest-posts bengal-studio-block-latest-posts__list';
+	$class = 'wp-block-bengal-studio-posts-block wp-block-bengal-studio-posts-block__list';
 	if ( isset( $attributes['align'] ) ) {
 		$class .= ' align' . $attributes['align'];
 	}
@@ -78,7 +78,7 @@ function render_latest_posts( $attributes ) {
 
 						$trimmed_excerpt = esc_html( wp_trim_words( $post_excerpt, $excerpt_length, ' &hellip; ' ) );
 						?>
-						<div class="bengal-studio-block-latest-posts__post-excerpt">
+						<div class="wp-block-bengal-studio-posts-block__post-excerpt">
 							<?php echo $trimmed_excerpt; ?>
 							<?php if ( strpos( $trimmed_excerpt, ' &hellip; ' ) !== false ) : ?>
 								<a href="<?php the_permalink(); ?>"><?php echo __( 'Read more' ); ?></a>
@@ -89,7 +89,7 @@ function render_latest_posts( $attributes ) {
 					?>
 
 					<?php if ( isset( $attributes['displayPostContent'] ) && $attributes['displayPostContent'] && isset( $attributes['displayPostContentRadio'] ) && 'full_post' === $attributes['displayPostContentRadio'] ) : ?>
-						<div class="bengal-studio-block-latest-posts__post-full-content">
+						<div class="wp-block-bengal-studio-posts-block__post-full-content">
 							<?php
 							the_content(
 								sprintf(
