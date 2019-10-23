@@ -4,11 +4,91 @@
  * CSS for both Frontend+Backend.
  */
 
-.wp-block-cgb-block-gutten-posts-block  {
-  background: $red;
-  border: 0.2rem solid $black;
-  color: $black;
-  margin: 0 auto;
-  max-width: 740px;
-  padding: 2rem;
+.byline,
+.updated:not(.published) {
+	display: none;
+}
+
+.bengal-studio-block-latest-posts {
+	@include list-unstyled();
+
+	.avatar {
+		margin-right: 0.5rem;
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+	}
+
+	&__post-excerpt,
+	&__post-full-content {
+		margin-bottom: 1rem;
+	}
+
+	&.is-grid {
+		display: flex;
+		flex-wrap: wrap;
+		padding: 0;
+
+		li {
+			margin: 0 16px 16px 0;
+			width: 100%;
+		}
+	}
+
+	@include media-breakpoint-up(lg) {
+		@for $i from 2 through 6 {
+			&.columns-#{ $i } li {
+				width: calc((100% / #{ $i }) - 16px);
+			}
+		}
+	}
+
+	&.image-alignbehind {
+		.post-has-image {
+			display: flex;
+			align-items: flex-end;
+			position: relative;
+			min-height: 20rem;
+
+			.post-thumbnail {
+				bottom: 0;
+				left: 0;
+				position: absolute;
+				right: 0;
+				top: 0;
+
+				img {
+					height: 100%;
+					object-fit: cover;
+					max-width: 1000%;
+					width: 100%;
+				}
+
+				&:after {
+					background: rgba(0, 0, 0, 0.5);
+					bottom: 0;
+					content: '';
+					left: 0;
+					position: absolute;
+					right: 0;
+					top: 0;
+					z-index: 1;
+				}
+			}
+
+			.entry-body {
+				padding: 1em;
+				position: relative;
+				z-index: 2;
+			}
+
+			.cat-links a,
+			.entry-body,
+			.entry-meta,
+			.entry-meta .byline a,
+			.entry-title a {
+				color: #fff;
+			}
+		}
+	}
 }

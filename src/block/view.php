@@ -24,7 +24,7 @@ function render_latest_posts( $attributes ) {
 	$list_items_markup = '';
 	$excerpt_length    = $attributes['excerptLength'];
 	ob_start();
-	$class = 'wp-block-latest-posts wp-block-latest-posts__list';
+	$class = 'bengal-studio-block-latest-posts bengal-studio-block-latest-posts__list';
 	if ( isset( $attributes['align'] ) ) {
 		$class .= ' align' . $attributes['align'];
 	}
@@ -37,6 +37,9 @@ function render_latest_posts( $attributes ) {
 	if ( isset( $attributes['displayPostDate'] ) && $attributes['displayPostDate'] ) {
 		$class .= ' has-dates';
 	}
+	if ( $attributes['displayFeaturedImage'] && isset( $attributes['featuredImagePosition'] ) ) {
+		$class .= ' image-align' . $attributes['featuredImagePosition'];
+	}
 	if ( isset( $attributes['className'] ) ) {
 		$class .= ' ' . $attributes['className'];
 	}
@@ -44,7 +47,7 @@ function render_latest_posts( $attributes ) {
 	<ul class="<?php echo esc_attr( $class ); ?>">
 		<?php foreach ( $recent_posts as $post ) : ?>
 			<?php setup_postdata( $post ); ?>
-			<li>
+			<li <?php echo has_post_thumbnail() ? 'class="post-has-image"' : ''; ?>>
 				<?php if ( has_post_thumbnail() && $attributes['displayFeaturedImage'] && $attributes['featuredImageSize'] ) : ?>
 					<figure>
 						<a class="post-thumbnail" href="<?php the_permalink(); ?>" aria-hidden="true" tabindex="-1">
@@ -65,6 +68,47 @@ function render_latest_posts( $attributes ) {
 				<?php endif; ?>
 				<div class="entry-body">
 					<?php the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' ); ?>
+
+					<?php
+					if ( isset( $attributes['displayPostContent'] ) && $attributes['displayPostContent'] && isset( $attributes['displayPostContentRadio'] ) && 'excerpt' === $attributes['displayPostContentRadio'] ) :
+						$post_excerpt = $post->post_excerpt;
+						if ( ! ( $post_excerpt ) ) {
+							$post_excerpt = $post->post_content;
+						}
+
+						$trimmed_excerpt = esc_html( wp_trim_words( $post_excerpt, $excerpt_length, ' &hellip; ' ) );
+						?>
+						<div class="bengal-studio-block-latest-posts__post-excerpt">
+							<?php echo $trimmed_excerpt; ?>
+							<?php if ( strpos( $trimmed_excerpt, ' &hellip; ' ) !== false ) : ?>
+								<a href="<?php the_permalink(); ?>"><?php echo __( 'Read more' ); ?></a>
+							<?php endif; ?>
+						</div>
+						<?php
+					endif;
+					?>
+
+					<?php if ( isset( $attributes['displayPostContent'] ) && $attributes['displayPostContent'] && isset( $attributes['displayPostContentRadio'] ) && 'full_post' === $attributes['displayPostContentRadio'] ) : ?>
+						<div class="bengal-studio-block-latest-posts__post-full-content">
+							<?php
+							the_content(
+								sprintf(
+									wp_kses(
+										/* translators: %s: Name of current post. Only visible to screen readers */
+										__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', '_s' ),
+										array(
+											'span' => array(
+												'class' => array(),
+											),
+										)
+									),
+									get_the_title()
+								)
+							);
+							?>
+						</div>
+					<?php endif; ?>
+
 					<div class="entry-meta">
 						<?php
 						if ( $attributes['showAuthor'] ) :
@@ -93,6 +137,7 @@ function render_latest_posts( $attributes ) {
 								esc_html( get_the_modified_date() )
 							);
 							$posted_on   = sprintf(
+								'<span class="screen-reader-text">%1$s</span> %2$s',
 								/* translators: %s: post date. */
 								esc_html_x( 'Posted on %s', 'post date', '_s' ),
 								'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
@@ -102,46 +147,6 @@ function render_latest_posts( $attributes ) {
 						endif;
 						?>
 					</div>
-
-					<?php
-					if ( isset( $attributes['displayPostContent'] ) && $attributes['displayPostContent'] && isset( $attributes['displayPostContentRadio'] ) && 'excerpt' === $attributes['displayPostContentRadio'] ) :
-						$post_excerpt = $post->post_excerpt;
-						if ( ! ( $post_excerpt ) ) {
-							$post_excerpt = $post->post_content;
-						}
-
-						$trimmed_excerpt = esc_html( wp_trim_words( $post_excerpt, $excerpt_length, ' &hellip; ' ) );
-						?>
-						<div class="wp-block-latest-posts__post-excerpt">
-							<?php echo $trimmed_excerpt; ?>
-							<?php if ( strpos( $trimmed_excerpt, ' &hellip; ' ) !== false ) : ?>
-								<a href="<?php the_permalink(); ?>"><?php echo __( 'Read more' ); ?></a>
-							<?php endif; ?>
-						</div>
-						<?php
-					endif;
-					?>
-
-					<?php if ( isset( $attributes['displayPostContent'] ) && $attributes['displayPostContent'] && isset( $attributes['displayPostContentRadio'] ) && 'full_post' === $attributes['displayPostContentRadio'] ) : ?>
-						<div class="wp-block-latest-posts__post-full-content">
-							<?php
-							the_content(
-								sprintf(
-									wp_kses(
-										/* translators: %s: Name of current post. Only visible to screen readers */
-										__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', '_s' ),
-										array(
-											'span' => array(
-												'class' => array(),
-											),
-										)
-									),
-									get_the_title()
-								)
-							);
-							?>
-						</div>
-					<?php endif; ?>
 				</div>
 			</li>
 		<?php endforeach; ?>
